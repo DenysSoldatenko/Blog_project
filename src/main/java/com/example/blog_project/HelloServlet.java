@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.blog_project;
 
 import java.io.*;
 
