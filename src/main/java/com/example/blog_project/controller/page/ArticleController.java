@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Controller for handling requests related to the "News" page.
+ * Controller for handling requests related to the "Article" page.
  */
-@WebServlet({"/news", "/news/*"})
-public class NewsController extends AbstractController {
+@WebServlet("/article")
+public class ArticleController extends AbstractController {
   @Override
   protected void doGet(HttpServletRequest req,
                        HttpServletResponse resp) throws ServletException, IOException {
-    forwardToPage("news.jsp", req, resp);
+    forwardToPage("article.jsp", req, resp);
   }
 }
