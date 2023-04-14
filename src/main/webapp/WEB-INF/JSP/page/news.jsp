@@ -1,13 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <div class="article thumbnail">
-	<a href="/article"><img src="http://placehold.it/1000x400"
-		alt="Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem."></a>
+	<a href="/article"><img src="http://placehold.it/1000x400" alt="Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem."></a>
 	<div class="data">
 		<h3>
-			<a href="/article">Nam quam nunc, blandit vel, luctus
-				pulvinar, hendrerit id, lorem.</a>
+			<a href="/article">Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.</a>
 		</h3>
 		<ul class="vertical large-horizontal menu">
 			<li><i class="fi-folder"></i><a href="#">Phasellus</a></li>
@@ -17,14 +13,12 @@
 		</ul>
 		<hr>
 		<div class="desc">
-			<p>Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id,
-				lorem. Nam quam nunc, blandit vel, luctus pulvinar</p>
+			<p>Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Nam quam nunc, blandit vel, luctus pulvinar</p>
 		</div>
 	</div>
 </div>
 <div class="article thumbnail">
-	<a href="/article"><img src="http://placehold.it/1000x400"
-		alt="Donec venenatis vulputate lorem."></a>
+	<a href="/article"><img src="http://placehold.it/1000x400" alt="Donec venenatis vulputate lorem."></a>
 	<div class="data">
 		<h3>
 			<a href="/article">Donec venenatis vulputate lorem.</a>
@@ -42,12 +36,10 @@
 	</div>
 </div>
 <div class="article thumbnail">
-	<a href="/article"><img src="http://placehold.it/1000x400"
-		alt="Praesent ac massa at ligula laoreet iaculis."></a>
+	<a href="/article"><img src="http://placehold.it/1000x400" alt="Praesent ac massa at ligula laoreet iaculis."></a>
 	<div class="data">
 		<h3>
-			<a href="/article">Praesent ac massa at ligula laoreet
-				iaculis.</a>
+			<a href="/article">Praesent ac massa at ligula laoreet iaculis.</a>
 		</h3>
 		<ul class="vertical large-horizontal menu">
 			<li><i class="fi-folder"></i><a href="#">Phasellus</a></li>
@@ -57,15 +49,12 @@
 		</ul>
 		<hr>
 		<div class="desc">
-			<p>Praesent ac massa at ligula laoreet iaculis. Praesent ac massa
-				at ligula laoreet iaculis. Praesent ac massa at ligula laoreet
-				iaculis. Praesent ac massa at ligula laoreet iaculis. Praesent ac
-				massa at ligula laoreet iaculis.</p>
+			<p>Praesent ac massa at ligula laoreet iaculis. Praesent ac massa at ligula laoreet iaculis. Praesent ac massa at ligula laoreet
+				iaculis. Praesent ac massa at ligula laoreet iaculis. Praesent ac massa at ligula laoreet iaculis.</p>
 		</div>
 	</div>
 </div>
-<ul class="pagination text-center" role="navigation"
-	aria-label="Pagination">
+<ul class="pagination text-center" role="navigation" aria-label="Pagination">
 	<li class="pagination-previous"><a href="#" aria-label="Previous">Previous</a></li>
 	<li><a href="#" aria-label="Page 1">1</a></li>
 	<li class="ellipsis"></li>

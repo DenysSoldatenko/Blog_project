@@ -278,8 +278,8 @@ nav {
 .article img.loading-indicator {
 	width: 3em;
 	height: 3em;
-	min-width: 0;
-	min-height: 0;
+	min-width: 0px;
+	min-height: 0px;
 	margin:0 auto;
 	display: none;
 }
