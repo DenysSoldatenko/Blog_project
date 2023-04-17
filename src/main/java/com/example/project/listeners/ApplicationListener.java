@@ -1,15 +1,16 @@
-package com.example.blog_project.listener;
+package com.example.project.listeners;
 
 
-import com.example.blog_project.service.impl.ServiceManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.example.project.services.impl.ServiceManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
+/**
+ * Application listener for initializing and destroying application resources.
+ */
 @WebListener
 public class ApplicationListener implements ServletContextListener {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationListener.class);

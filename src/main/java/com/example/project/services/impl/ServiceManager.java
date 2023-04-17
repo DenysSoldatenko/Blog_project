@@ -1,16 +1,18 @@
-package com.example.blog_project.service.impl;
+package com.example.project.services.impl;
 
-import com.example.blog_project.service.BusinessService;
-import com.example.blog_project.util.AppUtil;
+import com.example.project.services.BusinessService;
+import com.example.project.utils.AppUtil;
+import java.sql.SQLException;
+import java.util.Properties;
+import javax.servlet.ServletContext;
 import lombok.Getter;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
-import java.sql.SQLException;
-import java.util.Properties;
-
+/**
+ * Manages services and resources of the application.
+ */
 public class ServiceManager {
   private static final String SERVICE_MANAGER = "SERVICE_MANAGER";
 
@@ -23,6 +25,12 @@ public class ServiceManager {
   @Getter
   final BusinessService businessService;
 
+  /**
+   * Returns the singleton instance of the ServiceManager.
+   *
+   * @param context the servlet context
+   * @return the ServiceManager instance
+   */
   public static ServiceManager getInstance(ServletContext context) {
     ServiceManager instance = (ServiceManager) context.getAttribute(SERVICE_MANAGER);
     if (instance == null) {
@@ -43,6 +51,9 @@ public class ServiceManager {
     return applicationProperties.getProperty(property);
   }
 
+  /**
+   * Destroys the ServiceManager instance and releases resources.
+   */
   public void destroy() {
     try {
       dataSource.close();

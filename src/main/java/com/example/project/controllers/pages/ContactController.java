@@ -1,11 +1,11 @@
-package com.example.blog_project.controller.page;
+package com.example.project.controllers.pages;
 
-import com.example.blog_project.controller.AbstractController;
+import com.example.project.controllers.AbstractController;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Controller for handling requests related to the "Contact" page.

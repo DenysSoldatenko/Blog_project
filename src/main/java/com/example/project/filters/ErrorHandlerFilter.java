@@ -1,23 +1,26 @@
-package com.example.blog_project.filter;
+package com.example.project.filters;
 
+import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+/**
+ * Filter for handling errors and exceptions.
+ */
 @WebFilter(filterName = "ErrorHandlerFilter", urlPatterns = "/*")
 public class ErrorHandlerFilter extends AbstractFilter {
 
   @Override
   public void doFilter(HttpServletRequest req, HttpServletResponse resp,
-																							FilterChain chain) throws IOException, ServletException {
+                       FilterChain chain) throws IOException, ServletException {
     try {
       chain.doFilter(req, resp);
     } catch (Throwable th) {
       String requestUrl = req.getRequestURI();
-      LOGGER.error("Error during processing the request: " + requestUrl, th);
+      logger.error("Error during processing the request: " + requestUrl, th);
       if (requestUrl.startsWith("/ajax/")) {
         resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       } else if (!requestUrl.startsWith("/error")) {

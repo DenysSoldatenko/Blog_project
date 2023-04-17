@@ -1,7 +1,7 @@
-package com.example.blog_project.data;
+package com.example.project.data;
 
-import com.example.blog_project.data.ArticleGenerator.ArticleItem;
-import com.example.blog_project.data.CategoryGenerator.CategoryItem;
+import com.example.project.data.ArticleGenerator.ArticleItem;
+import com.example.project.data.CategoryGenerator.CategoryItem;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;

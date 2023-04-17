@@ -1,6 +1,6 @@
-package com.example.blog_project.data;
+package com.example.project.data;
 
-import com.example.blog_project.data.CategoryGenerator.CategoryItem;
+import com.example.project.data.CategoryGenerator.CategoryItem;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,5 +1,8 @@
-package com.example.blog_project.exception;
+package com.example.project.exceptions;
 
+/**
+ * Custom exception class for application-specific exceptions.
+ */
 public class ApplicationException extends RuntimeException {
   public ApplicationException(String message) {
     super(message);
@@ -14,7 +17,7 @@ public class ApplicationException extends RuntimeException {
   }
 
   public ApplicationException(String message, Throwable cause,
-																														boolean enableSuppression, boolean writableStackTrace) {
+                              boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

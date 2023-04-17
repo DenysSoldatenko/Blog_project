@@ -1,18 +1,20 @@
-package com.example.blog_project.controller;
+package com.example.project.controllers;
 
-import com.example.blog_project.service.BusinessService;
-import com.example.blog_project.service.impl.ServiceManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.example.project.services.BusinessService;
+import com.example.project.services.impl.ServiceManager;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract base controller providing common functionality for controllers.
+ */
 public abstract class AbstractController extends HttpServlet {
-  protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
   private BusinessService businessService;
 
   @Override
@@ -24,12 +26,14 @@ public abstract class AbstractController extends HttpServlet {
     return businessService;
   }
 
-  public final void forwardToPage(String jspPage, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  public final void forwardToPage(String jspPage, HttpServletRequest req,
+                                  HttpServletResponse resp) throws ServletException, IOException {
     req.setAttribute("currentPage", "page/" + jspPage);
     req.getRequestDispatcher("/WEB-INF/JSP/page-template.jsp").forward(req, resp);
   }
 
-  public final void forwardToFragment(String jspPage, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  public final void forwardToFragment(String jspPage, HttpServletRequest req,
+                                    HttpServletResponse resp) throws ServletException, IOException {
     req.getRequestDispatcher("/WEB-INF/JSP/fragment/" + jspPage).forward(req, resp);
   }
 }

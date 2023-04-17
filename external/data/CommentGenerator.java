@@ -1,6 +1,6 @@
-package com.example.blog_project.data;
+package com.example.project.data;
 
-import com.example.blog_project.data.ArticleGenerator.ArticleItem;
+import com.example.project.data.ArticleGenerator.ArticleItem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

@@ -1,20 +1,20 @@
-package com.example.blog_project.controller.page;
+package com.example.project.controllers.pages;
 
-import com.example.blog_project.controller.AbstractController;
+import com.example.project.controllers.AbstractController;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * Controller for handling requests related to the "Article" page.
+ * Controller for handling error pages.
  */
-@WebServlet("/article")
-public class ArticleController extends AbstractController {
+@WebServlet("/error")
+public class ErrorController extends AbstractController {
   @Override
   protected void doGet(HttpServletRequest req,
                        HttpServletResponse resp) throws ServletException, IOException {
-    forwardToPage("article.jsp", req, resp);
+    forwardToPage("error.jsp", req, resp);
   }
 }

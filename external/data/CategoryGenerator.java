@@ -1,4 +1,4 @@
-package com.example.blog_project.data;
+package com.example.project.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
