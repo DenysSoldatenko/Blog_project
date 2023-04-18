@@ -34,16 +34,16 @@ public class ServiceManager {
   public static ServiceManager getInstance(ServletContext context) {
     ServiceManager instance = (ServiceManager) context.getAttribute(SERVICE_MANAGER);
     if (instance == null) {
-      instance = new ServiceManager(context);
+      instance = new ServiceManager();
       context.setAttribute(SERVICE_MANAGER, instance);
     }
     return instance;
   }
 
-  private ServiceManager(ServletContext context) {
+  private ServiceManager() {
     AppUtil.loadProperties(applicationProperties, "application.properties");
     dataSource = createBasicDataSource();
-    businessService = new BusinessServiceImpl();
+    businessService = new BusinessServiceImpl(this);
     LOGGER.info("ServiceManager instance created");
   }
 

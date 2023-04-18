@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class AbstractEntity<T> extends AbstractModel implements Serializable {
+public abstract class AbstractEntity<T> extends AbstractModel implements Serializable {
 
   private T id;
 }
