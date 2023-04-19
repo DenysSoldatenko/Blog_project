@@ -1,8 +1,10 @@
 package com.example.project.services.impl;
 
 import com.example.project.dao.SqlDao;
+import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.exceptions.ApplicationException;
+import com.example.project.models.Items;
 import com.example.project.services.BusinessService;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,6 +25,18 @@ class BusinessServiceImpl implements BusinessService {
   public Map<Integer, Category> mapCategories() {
     try (Connection c = dataSource.getConnection()) {
       return sql.mapCategories(c);
+    } catch (SQLException e) {
+      throw new ApplicationException("Can't execute db command: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public Items<Article> listArticles(int offset, int limit) {
+    try (Connection c = dataSource.getConnection()) {
+      Items<Article> items = new Items<>();
+      items.setItems(sql.listArticles(c, offset, limit));
+      items.setCount(sql.countArticles(c));
+      return items;
     } catch (SQLException e) {
       throw new ApplicationException("Can't execute db command: " + e.getMessage(), e);
     }
