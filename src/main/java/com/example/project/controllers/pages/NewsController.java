@@ -2,6 +2,7 @@ package com.example.project.controllers.pages;
 
 import com.example.project.controllers.AbstractController;
 import com.example.project.entities.Article;
+import com.example.project.entities.Category;
 import com.example.project.models.Items;
 import com.example.project.utils.Constant;
 import java.io.IOException;
@@ -19,11 +20,16 @@ public class NewsController extends AbstractController {
   protected void doGet(HttpServletRequest req,
                        HttpServletResponse resp) throws ServletException, IOException {
     String requestUrl = req.getRequestURI();
-    Items<Article> items = null;
+    Items<Article> items;
     if (requestUrl.endsWith("/news") || requestUrl.endsWith("/news/")) {
       items = getBusinessService().listArticles(0, Constant.LIMIT_ARTICLES_PER_PAGE);
-    }  //TODO display articles for category
-
+    } else {
+      String categoryUrl = requestUrl.replace("/news", "");
+      items = getBusinessService().listArticlesByCategory(categoryUrl, 0,
+        Constant.LIMIT_ARTICLES_PER_PAGE);
+      Category category = getBusinessService().findCategoryByUrl(categoryUrl);
+      req.setAttribute("selectedCategory", category);
+    }
     req.setAttribute("list", items.getItems());
     forwardToPage("news.jsp", req, resp);
   }

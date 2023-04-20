@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 /**
@@ -30,5 +31,24 @@ public final class SqlDao {
   public int countArticles(Connection c) throws SQLException {
     return sql.query(c, "select count(*) from articles a",
       new ScalarHandler<Number>()).intValue();
+  }
+
+  public List<Article> listArticlesByCategory(Connection c, String categoryUrl,
+                                              int offset, int limit) throws SQLException {
+    return sql.query(c, "select a.* from articles a, "
+    + "categories c where c.id=a.id_category "
+    + "and c.url=? order by a.id desc limit ? offset ?",
+      new ListMapper<>(new ArticleMapper()), categoryUrl, limit, offset);
+  }
+
+  public int countArticlesByCategory(Connection c, String categoryUrl) throws SQLException {
+    return sql.query(c, "select count(a.id) from articles a, "
+    + "categories c where a.id_category=c.id and c.url=?",
+      new ScalarHandler<Number>(), categoryUrl).intValue();
+  }
+
+  public Category findCategoryByUrl(Connection c, String categoryUrl) throws SQLException {
+    return sql.query(c, "select * from categories c where c.url = ?",
+      new BeanHandler<>(Category.class), categoryUrl);
   }
 }

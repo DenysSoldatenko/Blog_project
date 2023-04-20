@@ -6,7 +6,7 @@
         <ul class="menu" style="display: none;">
             <c:forEach var="categoryEntry" items="${CATEGORY_MAP }">
                 <c:set var="cat" value="${categoryEntry.value}"/>
-                <li class="item">
+                <li class="${selectedCategory.id == categoryEntry.key ? 'selected ' : '' }sitem">
                     <a href="/news${cat.url }">${cat.name}
                         <span>(${cat.articles })</span></a>
                 </li>

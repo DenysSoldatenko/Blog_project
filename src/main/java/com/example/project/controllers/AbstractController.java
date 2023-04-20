@@ -18,7 +18,7 @@ public abstract class AbstractController extends HttpServlet {
   private BusinessService businessService;
 
   @Override
-  public void init() throws ServletException {
+  public void init() {
     businessService = ServiceManager.getInstance(getServletContext()).getBusinessService();
   }
 
