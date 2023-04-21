@@ -17,4 +17,5 @@ public interface BusinessService {
 
   Category findCategoryByUrl(String categoryUrl);
 
+  Items<Article> listArticlesBySearchQuery(String searchQuery, int offset, int limit);
 }

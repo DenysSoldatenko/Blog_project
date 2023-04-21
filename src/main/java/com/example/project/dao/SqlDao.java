@@ -33,6 +33,17 @@ public final class SqlDao {
       new ScalarHandler<Number>()).intValue();
   }
 
+  /**
+   * Retrieves a list of articles
+   * belonging to a specific category with pagination.
+   *
+   * @param c           the database connection
+   * @param categoryUrl the URL of the category
+   * @param offset      the offset for pagination
+   * @param limit       the maximum number of articles to retrieve
+   * @return a List of Article objects belonging to the specified category
+   * @throws SQLException if a database access error occurs
+   */
   public List<Article> listArticlesByCategory(Connection c, String categoryUrl,
                                               int offset, int limit) throws SQLException {
     return sql.query(c, "select a.* from articles a, "
@@ -41,6 +52,14 @@ public final class SqlDao {
       new ListMapper<>(new ArticleMapper()), categoryUrl, limit, offset);
   }
 
+  /**
+   * Counts the total number of articles belonging to a specific category.
+   *
+   * @param c           the database connection
+   * @param categoryUrl the URL of the category
+   * @return the total number of articles in the specified category
+   * @throws SQLException if a database access error occurs
+   */
   public int countArticlesByCategory(Connection c, String categoryUrl) throws SQLException {
     return sql.query(c, "select count(a.id) from articles a, "
     + "categories c where a.id_category=c.id and c.url=?",
@@ -50,5 +69,38 @@ public final class SqlDao {
   public Category findCategoryByUrl(Connection c, String categoryUrl) throws SQLException {
     return sql.query(c, "select * from categories c where c.url = ?",
       new BeanHandler<>(Category.class), categoryUrl);
+  }
+
+  /**
+   * Retrieves a list of articles matching a search query with pagination.
+   *
+   * @param c           the database connection
+   * @param searchQuery the search query
+   * @param offset      the offset for pagination
+   * @param limit       the maximum number of articles to retrieve
+   * @return a List of Article objects matching the search query
+   * @throws SQLException if a database access error occurs
+   */
+  public List<Article> listArticlesBySearchQuery(Connection c, String searchQuery,
+                                                 int offset, int limit) throws SQLException {
+    String q = "%" + searchQuery + "%";
+    return sql.query(c, "select * from articles a "
+    + "where (a.title ilike ? or a.content ilike ?) order by a.id desc limit ? offset ?",
+        new ListMapper<>(new ArticleMapper()), q, q, limit, offset);
+  }
+
+  /**
+   * Counts the total number of articles matching a search query.
+   *
+   * @param c           the database connection
+   * @param searchQuery the search query
+   * @return the total number of articles matching the search query
+   * @throws SQLException if a database access error occurs
+   */
+  public int countArticlesBySearchQuery(Connection c, String searchQuery) throws SQLException {
+    String q = "%" + searchQuery + "%";
+    return new QueryRunner().query(c, "select count(a.id) from articles a "
+    + "where (a.title ilike ? or a.content ilike ?)",
+      new ScalarHandler<Number>(), q, q).intValue();
   }
 }
