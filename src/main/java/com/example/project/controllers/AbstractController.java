@@ -7,23 +7,39 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Abstract base controller providing common functionality for controllers.
  */
+@Getter
 public abstract class AbstractController extends HttpServlet {
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   private BusinessService businessService;
 
-  @Override
-  public void init() {
-    businessService = ServiceManager.getInstance(getServletContext()).getBusinessService();
+  /**
+   * Calculates the pagination offset based on the current page number and limit.
+   *
+   * @param req   the HTTP servlet request containing the page parameter
+   * @param limit the maximum number of items per page
+   * @return the calculated offset for pagination
+   * @throws NumberFormatException if the page parameter is not a valid integer
+   */
+  public final int getOffset(HttpServletRequest req, int limit) {
+    String val = req.getParameter("page");
+    if (val != null) {
+      int page = Integer.parseInt(val);
+      return (page - 1) * limit;
+    } else {
+      return 0;
+    }
   }
 
-  public final BusinessService getBusinessService() {
-    return businessService;
+  @Override
+  public void init() throws ServletException {
+    businessService = ServiceManager.getInstance(getServletContext()).getBusinessService();
   }
 
   public final void forwardToPage(String jspPage, HttpServletRequest req,

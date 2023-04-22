@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" 	  	tagdir="/WEB-INF/tags"%>
 
 <c:forEach var="article" items="${list }">
     <c:set var="category" value="${CATEGORY_MAP[article.idCategory] }"/>
@@ -26,17 +27,4 @@
     </div>
 </c:forEach>
 
-<ul class="pagination text-center" role="navigation" aria-label="Pagination">
-    <li class="pagination-previous"><a href="#"
-                                       aria-label="Previous">Previous</a></li>
-    <li><a href="#" aria-label="Page 1">1</a></li>
-    <li class="ellipsis"></li>
-    <li><a href="#" aria-label="Page 13">13</a></li>
-    <li><a href="#" aria-label="Page 14">14</a></li>
-    <li class="current">15</li>
-    <li><a href="#" aria-label="Page 16">16</a></li>
-    <li><a href="#" aria-label="Page 17">17</a></li>
-    <li class="ellipsis"></li>
-    <li><a href="#" aria-label="Page 43">43</a></li>
-    <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
-</ul>
+<tags:pagination pagination="${pagination }"/>

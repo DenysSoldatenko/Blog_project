@@ -1,14 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <div class="row">
 	<div class="small-12 medium-6 large-5 columns">
 		<p class="logo">
 			<i class="fi-shield"></i>PERSONAL BLOG
 		</p>
 		<p class="footer-links">
-			<a href="/news">News</a> 
+			<a href="${pageContext.request.contextPath}/news">News</a>
 			<a href="#">Search</a> 
-			<a href="/about">About</a> 
-			<a href="/contact">Contact</a>
+			<a href="${pageContext.request.contextPath}/about">About</a>
+			<a href="${pageContext.request.contextPath}/contact">Contact</a>
 		</p>
 		<p class="copywrite">Copywrite not copywrite © 2015</p>
 	</div>

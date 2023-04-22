@@ -4,6 +4,8 @@ import com.example.project.controllers.AbstractController;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.models.Items;
+import com.example.project.models.Pagination;
+import com.example.project.models.PaginationBuilder;
 import com.example.project.utils.Constant;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -16,21 +18,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet({"/news", "/news/*"})
 public class NewsController extends AbstractController {
+
   @Override
   protected void doGet(HttpServletRequest req,
                        HttpServletResponse resp) throws ServletException, IOException {
+    int offset = getOffset(req, Constant.LIMIT_ARTICLES_PER_PAGE);
     String requestUrl = req.getRequestURI();
     Items<Article> items;
     if (requestUrl.endsWith("/news") || requestUrl.endsWith("/news/")) {
-      items = getBusinessService().listArticles(0, Constant.LIMIT_ARTICLES_PER_PAGE);
+      items = getBusinessService().listArticles(offset, Constant.LIMIT_ARTICLES_PER_PAGE);
     } else {
       String categoryUrl = requestUrl.replace("/news", "");
-      items = getBusinessService().listArticlesByCategory(categoryUrl, 0,
-        Constant.LIMIT_ARTICLES_PER_PAGE);
+      items = getBusinessService().listArticlesByCategory(categoryUrl,
+          offset, Constant.LIMIT_ARTICLES_PER_PAGE);
       Category category = getBusinessService().findCategoryByUrl(categoryUrl);
       req.setAttribute("selectedCategory", category);
     }
     req.setAttribute("list", items.getItems());
+    Pagination pagination = new PaginationBuilder(requestUrl + "?",
+        offset, items.getCount()).withLimit(Constant.LIMIT_ARTICLES_PER_PAGE).build();
+    req.setAttribute("pagination", pagination);
     forwardToPage("news.jsp", req, resp);
   }
 }

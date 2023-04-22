@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,9 +7,9 @@
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="/static/css/foundation.css">
-<link rel="stylesheet" type="text/css" href="/static/css/foundation-icons.css">
-<link rel="stylesheet" type="text/css" href="/static/css/app.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/foundation.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/foundation-icons.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/app.css">
 </head>
 <body>
 	<header>
@@ -36,9 +36,9 @@
 	<footer class="footer">
 		<jsp:include page="fragment/footer.jsp"/>
 	</footer>
-	<script src="/static/js/jquery.js"></script>
-	<script src="/static/js/what-input.js"></script>
-	<script src="/static/js/foundation.js"></script>
-	<script src="/static/js/app.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/what-input.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/foundation.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/app.js"></script>
 </body>
 </html>

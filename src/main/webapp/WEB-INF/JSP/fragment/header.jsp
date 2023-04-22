@@ -6,11 +6,11 @@
             <h1>Blog name</h1>
         </div>
         <div class="large-6 medium-6 columns">
-            <form action="/search" method="get">
+            <form action="${pageContext.request.contextPath}/search" method="get">
                 <div class="input-group" style="margin-top: 1em;">
-                    <input id="search" class="input-group-field" name="query"
-                           placeholder="Search query" type="text"
-                           value="${searchQuery }">
+                    <label for="search"><input id="search" class="input-group-field" name="query"
+                                                       placeholder="Search query" type="text"
+                                                       value="${searchQuery }"></label>
                     <div class="input-group-button">
                         <input class="button" value="Find" type="submit">
                     </div>
