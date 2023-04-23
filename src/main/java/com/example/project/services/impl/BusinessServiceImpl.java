@@ -4,6 +4,7 @@ import com.example.project.dao.SqlDao;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.exceptions.ApplicationException;
+import com.example.project.exceptions.RedirectToValidUrlException;
 import com.example.project.models.Items;
 import com.example.project.services.BusinessService;
 import java.sql.Connection;
@@ -70,6 +71,26 @@ class BusinessServiceImpl implements BusinessService {
       items.setItems(sql.listArticlesBySearchQuery(c, searchQuery, offset, limit));
       items.setCount(sql.countArticlesBySearchQuery(c, searchQuery));
       return items;
+    } catch (SQLException e) {
+      throw new ApplicationException("Can't execute db command: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public Article viewArticle(Long idArticle, String requestUrl) throws RedirectToValidUrlException {
+    try (Connection c = dataSource.getConnection()) {
+      Article article = sql.findArticleById(c, idArticle);
+      if (article == null) {
+        return null;
+      }
+      if (!article.getArticleLink().equals(requestUrl)) {
+        throw new RedirectToValidUrlException(article.getArticleLink());
+      } else {
+        article.setViews(article.getViews() + 1);
+        sql.updateArticleViews(c, article);
+        c.commit();
+        return article;
+      }
     } catch (SQLException e) {
       throw new ApplicationException("Can't execute db command: " + e.getMessage(), e);
     }

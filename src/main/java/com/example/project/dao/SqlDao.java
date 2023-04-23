@@ -103,4 +103,12 @@ public final class SqlDao {
     + "where (a.title ilike ? or a.content ilike ?)",
       new ScalarHandler<Number>(), q, q).intValue();
   }
+
+  public Article findArticleById(Connection c, long idArticle) throws SQLException {
+    return sql.query(c, "select * from articles a where a.id = ?", new ArticleMapper(), idArticle);
+  }
+
+  public void updateArticleViews(Connection c, Article article) throws SQLException {
+    sql.update(c, "update articles set views=? where id=?", article.getViews(), article.getId());
+  }
 }
