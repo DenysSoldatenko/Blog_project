@@ -2,8 +2,10 @@ package com.example.project.services;
 
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
+import com.example.project.entities.Comment;
 import com.example.project.exceptions.RedirectToValidUrlException;
 import com.example.project.models.Items;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +23,6 @@ public interface BusinessService {
   Items<Article> listArticlesBySearchQuery(String searchQuery, int offset, int limit);
 
   Article viewArticle(Long idArticle, String requestUrl) throws RedirectToValidUrlException;
+
+  List<Comment> listComments(long idArticle, int offset, int limit);
 }

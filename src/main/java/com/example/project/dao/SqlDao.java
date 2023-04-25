@@ -1,10 +1,12 @@
 package com.example.project.dao;
 
 import com.example.project.dao.mapper.ArticleMapper;
+import com.example.project.dao.mapper.CommentMapper;
 import com.example.project.dao.mapper.ListMapper;
 import com.example.project.dao.mapper.MapCategoryMapper;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
+import com.example.project.entities.Comment;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -110,5 +112,23 @@ public final class SqlDao {
 
   public void updateArticleViews(Connection c, Article article) throws SQLException {
     sql.update(c, "update articles set views=? where id=?", article.getViews(), article.getId());
+  }
+
+  /**
+   * Retrieves a list of comments for a given article.
+   *
+   * @param c The database connection
+   * @param idArticle The ID of the article for which to retrieve comments
+   * @param offset The offset for pagination
+   * @param limit The maximum number of comments to retrieve
+   * @return A list of comments for the specified article
+   * @throws SQLException if a database access error occurs
+   */
+  public List<Comment> listComments(Connection c, long idArticle,
+                                    int offset, int limit) throws SQLException {
+    return sql.query(c, "select c.*, a.name, a.email, a.created as accountCreated, a.avatar "
+    + "from comments c, accounts a where a.id=c.id_account and c.id_article=? "
+    + "order by c.id desc limit ? offset ?",
+      new ListMapper<>(new CommentMapper(true)), idArticle, limit, offset);
   }
 }

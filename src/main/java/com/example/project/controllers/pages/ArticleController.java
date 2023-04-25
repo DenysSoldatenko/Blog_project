@@ -2,8 +2,11 @@ package com.example.project.controllers.pages;
 
 import com.example.project.controllers.AbstractController;
 import com.example.project.entities.Article;
+import com.example.project.entities.Comment;
 import com.example.project.exceptions.RedirectToValidUrlException;
+import com.example.project.utils.Constant;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,9 @@ public class ArticleController extends AbstractController {
         resp.sendRedirect("/404?url=" + requestUrl);
       } else {
         req.setAttribute("article", article);
+        List<Comment> comments = getBusinessService().listComments(article.getId(),
+            0, Constant.LIMIT_COMMENTS_PER_PAGE);
+        req.setAttribute("comments", comments);
         forwardToPage("article.jsp", req, resp);
       }
     } catch (RedirectToValidUrlException e) {
