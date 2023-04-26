@@ -39,6 +39,7 @@
 	<script src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
 	<script src="${pageContext.request.contextPath}/static/js/what-input.js"></script>
 	<script src="${pageContext.request.contextPath}/static/js/foundation.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/messages.jsp"></script>
 	<script src="${pageContext.request.contextPath}/static/js/app.js"></script>
 </body>
 </html>
