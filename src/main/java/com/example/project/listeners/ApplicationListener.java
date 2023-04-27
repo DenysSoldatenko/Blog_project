@@ -21,6 +21,8 @@ public class ApplicationListener implements ServletContextListener {
   public void contextInitialized(ServletContextEvent sce) {
     ServiceManager serviceManager = ServiceManager.getInstance(sce.getServletContext());
     Map<Integer, Category> map = serviceManager.getBusinessService().mapCategories();
+    sce.getServletContext().setAttribute("social_googleplus_clientId",
+        serviceManager.getApplicationProperty("social.googleplus.clientId"));
     sce.getServletContext().setAttribute(Constant.CATEGORY_MAP, map);
     System.out.println(Constant.CATEGORY_MAP + map.toString());
     LOGGER.info("Application started");

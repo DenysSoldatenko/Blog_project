@@ -26,3 +26,34 @@ function moreComments() {
         }
     });
 }
+
+// ------------------------ Google plus integration ------------------------
+var googleProfile = null;
+
+function submitComment() {
+    if (googleProfile == null) {
+        $('#sigin-form').foundation('open');
+    } else {
+        //TODO submit new comment logic
+    }
+}
+
+function onSignIn(googleUser) {
+    googleProfile = googleUser.getBasicProfile();
+    googleProfile.authToken = googleUser.getAuthResponse().id_token;
+    $('#sigin-form').foundation('close');
+    if (googleProfile.getImageUrl() != null) {
+        $('#new-comment-container img').attr('src', googleProfile.getImageUrl());
+    }
+    $('#new-comment-container img').attr('alt', googleProfile.getName());
+    $('#new-comment-container a.logout').css('display', 'block');
+}
+
+function gpLogout() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut();
+    googleProfile = null;
+    $('#new-comment-container a.logout').css('display', 'none');
+    $('#new-comment-container img').attr('src', '/static/img/no_avatar.png');
+    $('#new-comment-container img').attr('alt', messages.anonym);
+}
