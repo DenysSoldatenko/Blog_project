@@ -1,5 +1,6 @@
 package com.example.project.services;
 
+import com.example.project.dao.form.CommentForm;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.entities.Comment;
@@ -25,4 +26,6 @@ public interface BusinessService {
   Article viewArticle(Long idArticle, String requestUrl) throws RedirectToValidUrlException;
 
   List<Comment> listComments(long idArticle, int offset, int limit);
+
+  Comment createComment(CommentForm form);
 }

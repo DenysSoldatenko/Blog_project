@@ -1,6 +1,8 @@
 package com.example.project.services.impl;
 
 import com.example.project.dao.SqlDao;
+import com.example.project.dao.form.CommentForm;
+import com.example.project.entities.Account;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.entities.Comment;
@@ -10,6 +12,7 @@ import com.example.project.models.Items;
 import com.example.project.services.BusinessService;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -105,5 +108,17 @@ class BusinessServiceImpl implements BusinessService {
     } catch (SQLException e) {
       throw new ApplicationException("Can't execute db command: " + e.getMessage(), e);
     }
+  }
+
+  @Override
+  public Comment createComment(CommentForm form)  {
+    Comment c = new Comment();
+    c.setId(0L);
+    c.setContent("Test content");
+    c.setCreated(new Timestamp(System.currentTimeMillis()));
+    Account a = new Account();
+    a.setName("test_account");
+    c.setAccount(a);
+    return c;
   }
 }
