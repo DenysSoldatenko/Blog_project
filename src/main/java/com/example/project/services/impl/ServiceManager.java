@@ -20,6 +20,8 @@ public class ServiceManager {
 
   final Properties applicationProperties = new Properties();
 
+  final ServletContext applicationContext;
+
   final BasicDataSource dataSource;
 
   @Getter
@@ -34,13 +36,14 @@ public class ServiceManager {
   public static ServiceManager getInstance(ServletContext context) {
     ServiceManager instance = (ServiceManager) context.getAttribute(SERVICE_MANAGER);
     if (instance == null) {
-      instance = new ServiceManager();
+      instance = new ServiceManager(context);
       context.setAttribute(SERVICE_MANAGER, instance);
     }
     return instance;
   }
 
-  private ServiceManager() {
+  private ServiceManager(ServletContext context) {
+    applicationContext = context;
     AppUtil.loadProperties(applicationProperties, "application.properties");
     dataSource = createBasicDataSource();
     businessService = new BusinessServiceImpl(this);
