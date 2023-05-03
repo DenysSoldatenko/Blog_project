@@ -20,7 +20,7 @@ class GooglePlusSocialService implements SocialService {
 
   GooglePlusSocialService(ServiceManager serviceManager) {
     this.googlePlusClientId = serviceManager.getApplicationProperty("social.googleplus.clientId");
-    this.issuers = Arrays.asList(new String[]{"https://accounts.google.com", "accounts.google.com"});
+    this.issuers = Arrays.asList("https://accounts.google.com", "accounts.google.com");
   }
 
   @Override

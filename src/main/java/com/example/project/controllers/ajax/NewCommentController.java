@@ -20,7 +20,7 @@ public class NewCommentController extends AbstractController {
   @Override
   protected void doPost(HttpServletRequest req,
                         HttpServletResponse resp) throws ServletException, IOException {
-    CommentForm form = null; //TODO Create form from current request
+    CommentForm form = createForm(req, CommentForm.class);
     Comment comment = getBusinessService().createComment(form);
     req.setAttribute("comments", Collections.singleton(comment));
     forwardToFragment("comments.jsp", req, resp);

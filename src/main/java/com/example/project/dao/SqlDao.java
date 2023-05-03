@@ -1,9 +1,11 @@
 package com.example.project.dao;
 
+import com.example.project.dao.form.CommentForm;
 import com.example.project.dao.mapper.ArticleMapper;
 import com.example.project.dao.mapper.CommentMapper;
 import com.example.project.dao.mapper.ListMapper;
 import com.example.project.dao.mapper.MapCategoryMapper;
+import com.example.project.entities.Account;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.entities.Comment;
@@ -88,7 +90,7 @@ public final class SqlDao {
     String q = "%" + searchQuery + "%";
     return sql.query(c, "select * from articles a "
     + "where (a.title ilike ? or a.content ilike ?) order by a.id desc limit ? offset ?",
-        new ListMapper<>(new ArticleMapper()), q, q, limit, offset);
+      new ListMapper<>(new ArticleMapper()), q, q, limit, offset);
   }
 
   /**
@@ -117,10 +119,10 @@ public final class SqlDao {
   /**
    * Retrieves a list of comments for a given article.
    *
-   * @param c The database connection
+   * @param c         The database connection
    * @param idArticle The ID of the article for which to retrieve comments
-   * @param offset The offset for pagination
-   * @param limit The maximum number of comments to retrieve
+   * @param offset    The offset for pagination
+   * @param limit     The maximum number of comments to retrieve
    * @return A list of comments for the specified article
    * @throws SQLException if a database access error occurs
    */
@@ -130,5 +132,77 @@ public final class SqlDao {
     + "from comments c, accounts a where a.id=c.id_account and c.id_article=? "
     + "order by c.id desc limit ? offset ?",
       new ListMapper<>(new CommentMapper(true)), idArticle, limit, offset);
+  }
+
+  public Account findAccountByEmail(Connection c, String email) throws SQLException {
+    return sql.query(c, "select * from accounts a where a.email = ?",
+      new BeanHandler<>(Account.class), email);
+  }
+
+  /**
+   * Creates a new account in the database.
+   *
+   * @param connection The database connection
+   * @param email The email of the account
+   * @param name The name of the account
+   * @param avatar The avatar of the account
+   * @return The newly created Account object
+   * @throws SQLException if a database access error occurs
+   */
+  public Account createNewAccount(Connection connection, String email,
+                                  String name, String avatar) throws SQLException {
+    return sql.insert(connection,
+    "insert into accounts(id,email,name,avatar) values(nextval('account_seq'),?,?,?)",
+      new BeanHandler<>(Account.class), email, name, avatar);
+  }
+
+  /**
+   * Creates a new comment in the database.
+   *
+   * @param connection The database connection
+   * @param form The CommentForm containing comment information
+   * @param idAccount The ID of the associated account
+   * @return The newly created Comment object
+   * @throws SQLException if a database access error occurs
+   */
+  public Comment createComment(Connection connection,
+                               CommentForm form, long idAccount) throws SQLException {
+    return sql.insert(connection,
+    "insert into comments(id, id_article,id_account,content) values(nextval('comment_seq'),?,?,?)",
+      new CommentMapper(false), form.getIdArticle(), idAccount, form.getContent());
+  }
+
+  /**
+   * Finds an article for which a new comment notification is generated.
+   *
+   * @param connection The database connection
+   * @param id The ID of the article
+   * @return The Article object representing the found article
+   * @throws SQLException if a database access error occurs
+   */
+  public Article findArticleForNewCommentNotification(Connection connection,
+                                                      long id) throws SQLException {
+    return sql.query(connection,
+    "select a.id, a.id_category, a.url, a.title from articles a where a.id = ?",
+      new ArticleMapper(), id);
+  }
+
+  /**
+   * Counts the number of comments for a specific article.
+   *
+   * @param connection The database connection
+   * @param id The ID of the article
+   * @return The count of comments for the specified article
+   * @throws SQLException if a database access error occurs
+   */
+  public int countComments(Connection connection, long id) throws SQLException {
+    return sql.query(connection,
+    "select count(*) from comments where id_article=?",
+      new ScalarHandler<Number>(), id).intValue();
+  }
+
+  public void updateArticleComments(Connection c, Article article) throws SQLException {
+    sql.update(c, "update articles set comments=? where id=?",
+        article.getComments(), article.getId());
   }
 }

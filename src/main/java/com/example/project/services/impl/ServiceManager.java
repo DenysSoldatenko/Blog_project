@@ -1,6 +1,8 @@
 package com.example.project.services.impl;
 
+import com.example.project.services.AvatarService;
 import com.example.project.services.BusinessService;
+import com.example.project.services.SocialService;
 import com.example.project.utils.AppUtil;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -21,6 +23,10 @@ public class ServiceManager {
   final Properties applicationProperties = new Properties();
 
   final ServletContext applicationContext;
+
+  final SocialService socialService;
+
+  final AvatarService avatarService;
 
   final BasicDataSource dataSource;
 
@@ -46,6 +52,8 @@ public class ServiceManager {
     applicationContext = context;
     AppUtil.loadProperties(applicationProperties, "application.properties");
     dataSource = createBasicDataSource();
+    socialService = new GooglePlusSocialService(this);
+    avatarService = new FileStorageAvatarService(this);
     businessService = new BusinessServiceImpl(this);
     LOGGER.info("ServiceManager instance created");
   }
