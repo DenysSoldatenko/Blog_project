@@ -12,11 +12,14 @@ import com.example.project.models.Items;
 import com.example.project.models.SocialAccount;
 import com.example.project.services.AvatarService;
 import com.example.project.services.BusinessService;
+import com.example.project.services.I18nService;
+import com.example.project.services.NotificationService;
 import com.example.project.services.SocialService;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
@@ -27,6 +30,9 @@ class BusinessServiceImpl implements BusinessService {
   private final SqlDao sql;
   private final SocialService socialService;
   private final AvatarService avatarService;
+  private final I18nService i18nService;
+  private final NotificationService notificationService;
+  private final String appHost;
   private static final Logger logger = LoggerFactory.getLogger(BusinessServiceImpl.class);
 
   BusinessServiceImpl(ServiceManager serviceManager) {
@@ -34,6 +40,9 @@ class BusinessServiceImpl implements BusinessService {
     this.dataSource = serviceManager.dataSource;
     this.socialService = serviceManager.socialService;
     this.avatarService = serviceManager.avatarService;
+    this.i18nService = serviceManager.i18nService;
+    this.notificationService = serviceManager.notificationService;
+    this.appHost = serviceManager.getApplicationProperty("app.host");
     this.sql = new SqlDao();
   }
 
@@ -120,6 +129,16 @@ class BusinessServiceImpl implements BusinessService {
     }
   }
 
+  private void sendNewCommentNotification(Article article, String commentContent, Locale locale) {
+    String fullLink = appHost + article.getArticleLink();
+    String title = i18nService
+        .getMessage("notification.newComment.title", locale, article.getTitle());
+    String content = i18nService
+        .getMessage("notification.newComment.content", locale, article.getTitle(),
+         fullLink, commentContent);
+    notificationService.sendNotification(title, content);
+  }
+
   public Comment createComment(CommentForm form) {
     String newAvatarPath = null;
     try (Connection connection = dataSource.getConnection()) {
@@ -140,7 +159,7 @@ class BusinessServiceImpl implements BusinessService {
       sql.updateArticleComments(connection, article);
       connection.commit();
       // after commit
-      //TODO Send new comment notification
+      sendNewCommentNotification(article, form.getContent(), form.getLocale());
       return comment;
     } catch (SQLException | RuntimeException | IOException e) {
       if (avatarService.deleteAvatarIfExists(newAvatarPath)) {

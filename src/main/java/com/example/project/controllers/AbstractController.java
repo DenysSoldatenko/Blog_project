@@ -1,5 +1,6 @@
 package com.example.project.controllers;
 
+import com.example.project.dao.form.AbstractForm;
 import com.example.project.services.BusinessService;
 import com.example.project.services.impl.ServiceManager;
 import java.io.IOException;
@@ -65,11 +66,12 @@ public abstract class AbstractController extends HttpServlet {
    * @return The created form object
    * @throws ServletException if a servlet-specific error occurs
    */
-  public final <T> T createForm(HttpServletRequest req,
-                                Class<T> formClass) throws ServletException {
+  public final <T extends AbstractForm> T createForm(HttpServletRequest req,
+                                                     Class<T> formClass) throws ServletException {
     try {
       Constructor<T> constructor = formClass.getConstructor();
       T form = constructor.newInstance();
+      form.setLocale(req.getLocale());
       BeanUtils.populate(form, req.getParameterMap());
       return form;
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
