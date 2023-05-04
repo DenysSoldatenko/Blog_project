@@ -2,6 +2,7 @@ package com.example.project.services.impl;
 
 import com.example.project.services.AvatarService;
 import com.example.project.services.BusinessService;
+import com.example.project.services.I18nService;
 import com.example.project.services.SocialService;
 import com.example.project.utils.AppUtil;
 import java.sql.SQLException;
@@ -30,6 +31,8 @@ public class ServiceManager {
 
   final BasicDataSource dataSource;
 
+  final I18nService i18nService;
+
   @Getter
   final BusinessService businessService;
 
@@ -54,6 +57,7 @@ public class ServiceManager {
     dataSource = createBasicDataSource();
     socialService = new GooglePlusSocialService(this);
     avatarService = new FileStorageAvatarService(this);
+    i18nService = new I18nServiceImpl();
     businessService = new BusinessServiceImpl(this);
     LOGGER.info("ServiceManager instance created");
   }
