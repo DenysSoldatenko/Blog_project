@@ -88,7 +88,7 @@ public class ServiceManager {
     } catch (SQLException e) {
       LOGGER.error("Close dataSource failed: " + e.getMessage(), e);
     }
-
+    notificationService.shutdown();
     LOGGER.info("ServiceManager instance destroyed");
   }
 

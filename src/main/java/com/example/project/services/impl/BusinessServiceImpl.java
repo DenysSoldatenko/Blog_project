@@ -2,12 +2,14 @@ package com.example.project.services.impl;
 
 import com.example.project.dao.SqlDao;
 import com.example.project.dao.form.CommentForm;
+import com.example.project.dao.form.ContactForm;
 import com.example.project.entities.Account;
 import com.example.project.entities.Article;
 import com.example.project.entities.Category;
 import com.example.project.entities.Comment;
 import com.example.project.exceptions.ApplicationException;
 import com.example.project.exceptions.RedirectToValidUrlException;
+import com.example.project.exceptions.ValidateException;
 import com.example.project.models.Items;
 import com.example.project.models.SocialAccount;
 import com.example.project.services.AvatarService;
@@ -167,5 +169,14 @@ class BusinessServiceImpl implements BusinessService {
       }
       throw new ApplicationException("Can't create new comment: " + e.getMessage(), e);
     }
+  }
+
+  @Override
+  public void createContactRequest(ContactForm form) throws ValidateException {
+    form.validate(i18nService);
+    String title = i18nService.getMessage("notification.contact.title", form.getLocale());
+    String content = i18nService.getMessage("notification.contact.content",
+        form.getLocale(), form.getName(), form.getEmail(), form.getText());
+    notificationService.sendNotification(title, content);
   }
 }
