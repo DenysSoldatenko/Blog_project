@@ -32,6 +32,7 @@ public class ServiceManager {
 
   final BasicDataSource dataSource;
 
+  @Getter
   final I18nService i18nService;
 
   final NotificationService notificationService;

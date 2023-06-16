@@ -1,8 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-         trimDirectiveWhitespaces="true" %>
+<%@ page contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <div class="article thumbnail">
@@ -26,14 +27,20 @@
         <hr/>
         <div class="content">${article.content }</div>
         <%-- ----------------------------------------- Social buttons ----------------------------------------- --%>
-        <div class="row columns social">
-            <img src="https://placehold.it/32x32?text=f" alt="social"/>
-            <img src="https://placehold.it/32x32?text=t" alt="social"/>
-            <img src="https://placehold.it/32x32?text=g" alt="social"/>
-            <img src="https://placehold.it/32x32?text=f" alt="social"/>
-            <img src="https://placehold.it/32x32?text=t" alt="social"/>
-            <img src="https://placehold.it/32x32?text=g" alt="social"/>
+        <!-- AddToAny BEGIN -->
+        <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+            <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+            <a class="a2a_button_facebook"></a>
+            <a class="a2a_button_twitter"></a>
+            <a class="a2a_button_telegram"></a>
+            <a class="a2a_button_linkedin"></a>
+            <a class="a2a_button_x"></a>
+            <a class="a2a_button_snapchat"></a>
+            <a class="a2a_button_reddit"></a>
+            <a class="a2a_button_copy_link"></a>
         </div>
+        <script async src="https://static.addtoany.com/menu/page.js"></script>
+        <!-- AddToAny END -->
         <br>
         <%-- ----------------------------------------- Comments section ----------------------------------------- --%>
         <div class="comments">
@@ -47,8 +54,8 @@
                 <a href="javascript:moreComments();"
                    class="button hollow expanded load-more-btn"
                 ${article.comments >  fn:length(comments) ? '' : 'style="display:none"' }>Load More</a>
-                <img src="${pageContext.request.contextPath}/static/img/loading.gif"
-                     alt="Loading..." class="loading-indicator"/>
+                <img src="/static/img/loading.gif" alt="Loading..."
+                     class="loading-indicator"/>
             </div>
         </div>
     </div>

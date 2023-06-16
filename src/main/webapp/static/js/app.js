@@ -55,6 +55,7 @@ function submitComment() {
                 },
                 error: function (data) {
                     alert(messages.errorAjax);
+                    $('#new-comment-loading img').css('display', 'none');
                 }
             });
         } else {
