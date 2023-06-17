@@ -3,7 +3,7 @@
 <div class="callout primary" style="margin: 0;">
     <div class="row">
         <div class="large-6 medium-6 columns">
-            <h1>Blog name</h1>
+            <h1>Blog demo</h1>
         </div>
         <div class="large-6 medium-6 columns">
             <form action="${pageContext.request.contextPath}/search" method="get">

@@ -1,6 +1,7 @@
 package com.example.project.controllers;
 
 import com.example.project.dao.form.AbstractForm;
+import com.example.project.exceptions.ApplicationException;
 import com.example.project.services.BusinessService;
 import com.example.project.services.impl.ServiceManager;
 import java.io.IOException;
@@ -23,6 +24,23 @@ public abstract class AbstractController extends HttpServlet {
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   private BusinessService businessService;
 
+  @Override
+  public final void init() {
+    businessService = ServiceManager.getInstance(getServletContext()).getBusinessService();
+  }
+
+  public final void forwardToPage(String jspPage, HttpServletRequest req,
+                                  HttpServletResponse resp) throws ServletException, IOException {
+    req.setAttribute("currentPage", "page/" + jspPage);
+    req.getRequestDispatcher("/WEB-INF/JSP/page-template.jsp").forward(req, resp);
+  }
+
+  public final void forwardToFragment(String jspPage, HttpServletRequest req,
+                                    HttpServletResponse resp) throws ServletException, IOException {
+    req.getRequestDispatcher("/WEB-INF/JSP/fragment/" + jspPage).forward(req, resp);
+  }
+
+
   /**
    * Calculates the pagination offset based on the current page number and limit.
    *
@@ -41,28 +59,12 @@ public abstract class AbstractController extends HttpServlet {
     }
   }
 
-  @Override
-  public void init() {
-    businessService = ServiceManager.getInstance(getServletContext()).getBusinessService();
-  }
-
-  public final void forwardToPage(String jspPage, HttpServletRequest req,
-                                  HttpServletResponse resp) throws ServletException, IOException {
-    req.setAttribute("currentPage", "page/" + jspPage);
-    req.getRequestDispatcher("/WEB-INF/JSP/page-template.jsp").forward(req, resp);
-  }
-
-  public final void forwardToFragment(String jspPage, HttpServletRequest req,
-                                    HttpServletResponse resp) throws ServletException, IOException {
-    req.getRequestDispatcher("/WEB-INF/JSP/fragment/" + jspPage).forward(req, resp);
-  }
-
   /**
    * Creates a form object from the HttpServletRequest parameters.
    *
-   * @param req The HttpServletRequest object
+   * @param req       The HttpServletRequest object
    * @param formClass The class of the form object to create
-   * @param <T> The type of the form object
+   * @param <T>       The type of the form object
    * @return The created form object
    * @throws ServletException if a servlet-specific error occurs
    */
@@ -75,7 +77,8 @@ public abstract class AbstractController extends HttpServlet {
       BeanUtils.populate(form, req.getParameterMap());
       return form;
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-      throw new ServletException(e);
+      throw new ApplicationException("Can't create form "
+          + formClass + " for request: " + e.getMessage(), e);
     } catch (NoSuchMethodException e) {
       throw new RuntimeException(e);
     }

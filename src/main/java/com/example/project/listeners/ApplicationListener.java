@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * Application listener for initializing and destroying application resources.
  */
 @WebListener
-public class ApplicationListener implements ServletContextListener {
+public final class ApplicationListener implements ServletContextListener {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationListener.class);
 
   @Override

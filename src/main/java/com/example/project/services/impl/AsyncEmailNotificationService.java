@@ -37,7 +37,6 @@ public class AsyncEmailNotificationService implements NotificationService {
     executorService.shutdown();
   }
 
-
   private class EmailItem extends AbstractModel implements Runnable {
     private final String subject;
     private final String content;

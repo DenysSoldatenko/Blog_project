@@ -28,13 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class BusinessServiceImpl implements BusinessService {
-  private final DataSource dataSource;
-  private final SqlDao sql;
-  private final SocialService socialService;
-  private final AvatarService avatarService;
-  private final I18nService i18nService;
-  private final NotificationService notificationService;
-  private final String appHost;
+  protected final DataSource dataSource;
+  protected final SqlDao sql;
+  protected final SocialService socialService;
+  protected final AvatarService avatarService;
+  protected final I18nService i18nService;
+  protected final NotificationService notificationService;
+  protected final String appHost;
   private static final Logger logger = LoggerFactory.getLogger(BusinessServiceImpl.class);
 
   BusinessServiceImpl(ServiceManager serviceManager) {
@@ -131,7 +131,7 @@ class BusinessServiceImpl implements BusinessService {
     }
   }
 
-  private void sendNewCommentNotification(Article article, String commentContent, Locale locale) {
+  protected void sendNewCommentNotification(Article article, String commentContent, Locale locale) {
     String fullLink = appHost + article.getArticleLink();
     String title = i18nService
         .getMessage("notification.newComment.title", locale, article.getTitle());
@@ -141,7 +141,7 @@ class BusinessServiceImpl implements BusinessService {
     notificationService.sendNotification(title, content);
   }
 
-  public Comment createComment(CommentForm form) {
+  public Comment createComment(CommentForm form) throws ValidateException {
     String newAvatarPath = null;
     try (Connection connection = dataSource.getConnection()) {
       SocialAccount socialAccount = socialService.getSocialAccount(form.getAuthToken());

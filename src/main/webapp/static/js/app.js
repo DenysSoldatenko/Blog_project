@@ -92,3 +92,10 @@ function reply(name) {
         scrollTop: $('#new-comment-container textarea').offset().top
     }, 2000);
 }
+
+function gotoSearch() {
+    $('html, body').animate({
+        scrollTop: $('#search').offset().top
+    }, 2000);
+    $('#search').focus();
+}
