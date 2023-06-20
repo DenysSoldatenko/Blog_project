@@ -1,19 +1,28 @@
 package com.example.application.external;
 
 import com.github.javafaker.Faker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * A utility for generating sample data using the JavaFaker library.
+ */
 public class SampleDataGeneratorWithFaker {
   private static final Logger logger = LoggerFactory.getLogger(SampleDataGeneratorWithFaker.class);
+
+  /**
+   * Generates sample data for the blog application.
+   *
+   * @param args the command line arguments (not used)
+   */
   public static void main(String[] args) {
     String jdbcUrl = "jdbc:postgresql://localhost:5432/blog_application";
     String username = "postgres";
@@ -59,11 +68,14 @@ public class SampleDataGeneratorWithFaker {
 
   private static void generateArticles(Connection connection, Faker faker) throws SQLException {
     String selectCategoryQuery = "SELECT id, articles FROM categories";
-    String insertQuery = "INSERT INTO articles (title, \"group\", logo, \"desc\", content, id_category, created, views, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String insertQuery = "INSERT INTO articles (title, \"group\", logo, \"desc\", "
+        + "content, id_category, created, views, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (
-    PreparedStatement selectCategoryStatement = connection.prepareStatement(selectCategoryQuery);
-    PreparedStatement statement = connection.prepareStatement(insertQuery)
+        PreparedStatement selectCategoryStatement = connection.prepareStatement(
+            selectCategoryQuery
+        );
+        PreparedStatement statement = connection.prepareStatement(insertQuery)
     ) {
       ResultSet categoryResultSet = selectCategoryStatement.executeQuery();
       while (categoryResultSet.next()) {
@@ -71,22 +83,16 @@ public class SampleDataGeneratorWithFaker {
 
         for (int i = 0; i < numComments; i++) {
           String articleTitle = faker.book().title();
+          articleTitle = truncateIfTooLong(articleTitle, 25);
+
           String articleContent = faker.lorem().paragraph();
-          String articleDesc = faker.lorem().sentence();
+          articleContent = truncateIfTooLong(articleContent, 2500);
+
+          String articleDesc = faker.lorem().paragraph();
+          articleDesc = truncateIfTooLong(articleDesc, 250);
 
           String articleGroup = String.join(" ", faker.lorem().words(5));
-          if (articleTitle.length() > 25) {
-            articleTitle = articleTitle.substring(0, 25);
-          }
-          if (articleContent.length() > 2500) {
-            articleContent = articleContent.substring(0, 2500);
-          }
-          if (articleDesc.length() > 25) {
-            articleDesc = articleDesc.substring(0, 25);
-          }
-          if (articleGroup.length() > 25) {
-            articleGroup = articleGroup.substring(0, 25);
-          }
+          articleGroup = truncateIfTooLong(articleGroup, 25);
 
           statement.setString(1, articleTitle);
           statement.setString(2, articleGroup);
@@ -94,7 +100,7 @@ public class SampleDataGeneratorWithFaker {
           statement.setString(4, articleDesc);
           statement.setString(5, articleContent);
           statement.setInt(6, faker.random().nextInt(9) + 1); // Random category ID
-          statement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+          statement.setTimestamp(7, randomTimestamp());
           statement.setLong(8, faker.random().nextLong(1000));
           statement.setInt(9, faker.random().nextInt(100));
           statement.executeUpdate();
@@ -103,13 +109,29 @@ public class SampleDataGeneratorWithFaker {
     }
   }
 
+  public static Timestamp randomTimestamp() {
+    long minTimestamp = Timestamp.valueOf("2000-01-01 00:00:00").getTime();
+    long maxTimestamp = System.currentTimeMillis();
+
+    long randomEpoch = ThreadLocalRandom.current().nextLong(minTimestamp, maxTimestamp + 1);
+    return new Timestamp(randomEpoch);
+  }
+
+  private static String truncateIfTooLong(String value, int maxLength) {
+    if (value.length() > maxLength) {
+      return value.substring(0, maxLength);
+    }
+    return value;
+  }
+
   private static void generateComments(Connection connection, Faker faker) throws SQLException {
     String selectArticleQuery = "SELECT id, comments FROM articles";
-    String insertQuery = "INSERT INTO comments (id_account, id_article, content, created) VALUES (?, ?, ?, ?)";
+    String insertQuery = "INSERT INTO comments (id_account, id_article, content, created) "
+        + "VALUES (?, ?, ?, ?)";
 
     try (
-    PreparedStatement selectArticlesStatement = connection.prepareStatement(selectArticleQuery);
-    PreparedStatement insertStatement = connection.prepareStatement(insertQuery)
+        PreparedStatement selectArticlesStatement = connection.prepareStatement(selectArticleQuery);
+        PreparedStatement insertStatement = connection.prepareStatement(insertQuery)
     ) {
       ResultSet articlesResultSet = selectArticlesStatement.executeQuery();
       while (articlesResultSet.next()) {
@@ -120,7 +142,7 @@ public class SampleDataGeneratorWithFaker {
           insertStatement.setInt(1, faker.random().nextInt(9) + 1); // Random account ID
           insertStatement.setInt(2, articleId);
           insertStatement.setString(3, faker.lorem().sentence());
-          insertStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+          insertStatement.setTimestamp(4, randomTimestamp());
           insertStatement.executeUpdate();
         }
       }

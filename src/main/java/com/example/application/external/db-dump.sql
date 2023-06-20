@@ -13,7 +13,7 @@ CREATE TABLE articles
     title       varchar(25)                NOT NULL,
     "group"     varchar(25)                NOT NULL,
     logo        varchar(50)                NOT NULL,
-    "desc"      varchar(25)                NOT NULL,
+    "desc"      text                       NOT NULL,
     content     text                       NOT NULL,
     id_category integer                    NOT NULL REFERENCES categories (id) ON UPDATE CASCADE ON DELETE RESTRICT,
     created     timestamp(0) DEFAULT now() NOT NULL,
