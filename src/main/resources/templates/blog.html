@@ -15,14 +15,14 @@
                         <article th:each="article : ${articles}">
                             <header class="entry-header">
                                 <h1 class="entry-title">
-									<a href="blog-single.html" th:text="${article.getTitle()}" rel="bookmark">Somewhere in time</a>
+									<a th:href="@{/blog/article/{title}(title=${article.getTitle().replace(' ', '_')})}" th:text="${article.getTitle()}" rel="bookmark">Somewhere in time</a>
 								</h1>
                                 <div class="entry-meta">
 									<span class="posted-on">
 										<time th:text="${#dates.format(article.getCreated(), 'MMMM d, yyyy')}" class="entry-date published">April 12, 2016</time>
 									</span>
 									<span class="comments-link">
-										<a th:text="${article.getComments() + ' comments'}" href="#">Leave a comment</a>
+										<a th:text="${article.getComments() + ' comments'}" >Leave a comment</a>
 									</span>
                                 </div>
                                 <div class="entry-thumbnail">
@@ -32,7 +32,7 @@
                                 </div>
                             </header>
                             <div class="entry-summary">
-                                <p th:text="${article.getDesc()}">
+                                <p th:text="${article.getDescription()}">
 									<a class="more-link" href="blog-single.html">Read more</a>
                                 </p>
                             </div>
@@ -64,7 +64,7 @@
                         <h4 class="widget-title">Recent Posts</h4>
                         <ul>
                             <li th:each="title : ${recentTitles}">
-                                <a th:text="${title}" th:href="@{/blog-single.html}"></a>
+                                <a th:text="${title}" th:href="@{/blog/article/{title}(title=${title.replace(' ', '_')})}"></a>
                             </li>
                         </ul>
                     </aside>
@@ -85,7 +85,7 @@
                         <ul id="recentcomments">
 							<li class="recentcomments" th:each="comment : ${recentComments}">
 								<span th:text="${comment['ACCOUNT_NAME']}"></span> on
-								<a href="blog-single.html" th:text="${comment['ARTICLE_TITLE']}"></a>
+								<a th:href="@{/blog/article/{title}(title=${comment['ARTICLE_TITLE'].replace(' ', '_')})}" th:text="${comment['ARTICLE_TITLE']}"></a>
 							</li>
 						</ul>
                     </aside>

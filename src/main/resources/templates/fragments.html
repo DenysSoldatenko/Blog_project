@@ -37,7 +37,8 @@
                     <a href="#">Categories</a>
                     <ul class="sub-menu">
                         <li th:each="category : ${categories}">
-                            <a th:text="${category.getName()}" th:href="@{/portfolio-category.html}"></a>
+                            <a th:text="${category.getName()}"
+                               th:href="@{/blog/category/{title}(title=${category.getName()})}"></a>
                         </li>
                     </ul>
                 </li>
@@ -46,6 +47,7 @@
         </div>
     </nav>
 </header>
+
 <footer th:fragment="footer" id="colophon" class="site-footer">
     <div class="container">
         <div class="site-info">
@@ -55,6 +57,31 @@
         </div>
     </div>
 </footer>
+
+<div th:fragment="recent" id="secondary" class="column third">
+    <div id="sidebar-1" class="widget-area" role="complementary">
+        <aside id="recent-posts-2" class="widget widget_recent_entries">
+            <h4 class="widget-title">Recent Posts</h4>
+            <ul>
+                <li th:each="title : ${recentTitles}">
+                    <a th:text="${title}" th:href="@{/blog/article/{title}(title=${title.replace(' ', '_')})}"></a>
+                </li>
+            </ul>
+        </aside>
+
+        <aside id="recent-comments-2" class="widget widget_recent_comments">
+            <h4 class="widget-title">Recent Comments</h4>
+            <ul id="recentcomments">
+                <li class="recentcomments" th:each="comment : ${recentComments}">
+                    <span th:text="${comment['ACCOUNT_NAME']}"></span> on
+                    <a th:href="@{/blog/article/{title}(title=${comment['ARTICLE_TITLE'].replace(' ', '_')})}" th:text="${comment['ARTICLE_TITLE']}"></a>
+                </li>
+            </ul>
+        </aside>
+    </div>
+    <!-- .widget-area -->
+</div>
+
 <a th:fragment="top" href="#top" class="smoothup" title="Back to top">
     <span class="genericon genericon-collapse"></span>
 </a>

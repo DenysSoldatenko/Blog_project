@@ -21,11 +21,11 @@ public class Article {
 
   private String title;
 
-  private String group;
+  private String article_group;
 
   private String logo;
 
-  private String desc;
+  private String description;
 
   private String content;
 

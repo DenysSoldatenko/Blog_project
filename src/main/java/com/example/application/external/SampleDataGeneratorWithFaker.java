@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.concurrent.ThreadLocalRandom;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +67,7 @@ public class SampleDataGeneratorWithFaker {
 
   private static void generateArticles(Connection connection, Faker faker) throws SQLException {
     String selectCategoryQuery = "SELECT id, articles FROM categories";
-    String insertQuery = "INSERT INTO articles (title, \"group\", logo, \"desc\", "
+    String insertQuery = "INSERT INTO articles (title, article_group, logo, description, "
         + "content, id_category, created, views, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (
@@ -85,7 +84,7 @@ public class SampleDataGeneratorWithFaker {
           String articleTitle = faker.book().title();
           articleTitle = truncateIfTooLong(articleTitle, 25);
 
-          String articleContent = faker.lorem().paragraph();
+          String articleContent = faker.lorem().paragraph(550);
           articleContent = truncateIfTooLong(articleContent, 2500);
 
           String articleDesc = faker.lorem().paragraph();
@@ -99,16 +98,21 @@ public class SampleDataGeneratorWithFaker {
           statement.setString(3, "https://picsum.photos/250/300?random=" + faker.random().nextInt(1000));
           statement.setString(4, articleDesc);
           statement.setString(5, articleContent);
-          statement.setInt(6, faker.random().nextInt(9) + 1); // Random category ID
+          statement.setInt(6, categoryResultSet.getInt("id")); // Random category ID
           statement.setTimestamp(7, randomTimestamp());
           statement.setLong(8, faker.random().nextLong(1000));
-          statement.setInt(9, faker.random().nextInt(100));
+          statement.setInt(9, faker.random().nextInt(50));
           statement.executeUpdate();
         }
       }
     }
   }
 
+  /**
+   * Generates a random Timestamp between the year 2000 and the current time.
+   *
+   * @return a randomly generated Timestamp
+   */
   public static Timestamp randomTimestamp() {
     long minTimestamp = Timestamp.valueOf("2000-01-01 00:00:00").getTime();
     long maxTimestamp = System.currentTimeMillis();

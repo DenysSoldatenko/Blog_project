@@ -23,4 +23,9 @@ public class CategoryDao {
     return jdbcTemplate.query("SELECT * FROM blog_application.public.categories",
       new BeanPropertyRowMapper<>(Category.class));
   }
+
+  public String getCategoryName(String name) {
+    String query = "SELECT name FROM blog_application.public.categories WHERE name LIKE ?";
+    return jdbcTemplate.queryForObject(query, String.class, "%" + name + "%");
+  }
 }
