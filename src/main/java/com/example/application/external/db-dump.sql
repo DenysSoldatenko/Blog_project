@@ -27,7 +27,7 @@ CREATE TABLE accounts
     id      bigserial PRIMARY KEY,
     email   varchar(100)               NOT NULL UNIQUE,
     name    varchar(30)                NOT NULL,
-    avatar  varchar(255),
+    avatar  varchar(50),
     created timestamp(0) DEFAULT now() NOT NULL
 );
 

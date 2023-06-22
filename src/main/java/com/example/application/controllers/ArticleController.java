@@ -3,10 +3,8 @@ package com.example.application.controllers;
 import com.example.application.dao.ArticleDao;
 import com.example.application.dao.CategoryDao;
 import com.example.application.models.Article;
-import com.example.application.utils.AccountService;
+import com.example.application.utils.BlogService;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -29,17 +27,31 @@ public class ArticleController {
 
   private final CategoryDao categoryDao;
 
-  private final AccountService accountService;
+  private final BlogService blogService;
 
+  /**
+   * Constructor to initialize the ArticleController with necessary dependencies.
+   *
+   * @param articleDao   the ArticleDao instance
+   * @param categoryDao  the CategoryDao instance
+   * @param blogService  the BlogService instance
+   */
   @Autowired
   public ArticleController(ArticleDao articleDao,
-                           CategoryDao categoryDao, AccountService accountService) {
+                           CategoryDao categoryDao, BlogService blogService) {
     this.articleDao = articleDao;
     this.categoryDao = categoryDao;
-    this.accountService = accountService;
+    this.blogService = blogService;
   }
 
-
+  /**
+   * Handles the "/home" endpoint to display a paginated list of articles.
+   *
+   * @param pageNumber  the requested page number (default is 1)
+   * @param pageSize    the requested page size (default is 12)
+   * @param model       the Model object to populate attributes for the view
+   * @return the name of the view to render ("index")
+   */
   @GetMapping("/home")
   public String home(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
                      @RequestParam(value = "size", defaultValue = "12") int pageSize,
@@ -47,14 +59,10 @@ public class ArticleController {
     PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
     List<Article> articles = articleDao.getArticles(pageRequest);
     long totalArticles = articleDao.getTotalArticles();
-    int totalPages = (int) Math.ceil((double) totalArticles / pageSize);
-    List<Integer> pages = IntStream.range(0, totalPages).boxed().collect(Collectors.toList());
 
+    blogService.setPageAttributes(model, pageNumber, totalArticles, pageSize);
     model.addAttribute("articles", articles);
-    model.addAttribute("totalPages", totalPages);
-    model.addAttribute("currentPage", pageNumber);
-    model.addAttribute("pages", pages);
-    model.addAttribute("categories", categoryDao.getCategories());
+
     return "index";
   }
 
@@ -73,6 +81,14 @@ public class ArticleController {
     return "blog";
   }
 
+  /**
+   * Handles the "/blog/article/{articleTitle}"
+   * endpoint to display a single article and its details.
+   *
+   * @param model        the Model object to populate attributes for the view
+   * @param articleTitle the title of the article
+   * @return the name of the view to render ("blog-single")
+   */
   @GetMapping("/blog/article/{articleTitle}")
   public String blogSingle(Model model, @PathVariable String articleTitle) {
     model.addAttribute("categories", categoryDao.getCategories());
@@ -87,11 +103,14 @@ public class ArticleController {
   }
 
   /**
-   * Handles the request for a blog category page.
+   * Handles the "/blog/category/{categoryTitle}"
+   * endpoint to display articles by category.
    *
-   * @param model         the Model object for storing data to be displayed in the view
+   * @param pageNumber   the requested page number (default is 1)
+   * @param pageSize     the requested page size (default is 12)
    * @param categoryTitle the title of the category
-   * @return the name of the view template
+   * @param model        the Model object to populate attributes for the view
+   * @return the name of the view to render ("portfolio-category")
    */
   @GetMapping("blog/category/{categoryTitle}")
   public String blogCategory(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
@@ -99,25 +118,56 @@ public class ArticleController {
                              @PathVariable String categoryTitle,
                              Model model) {
     PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-    List<Article> articles = articleDao
-        .getArticlesByCategory(
-        categoryTitle.replace('_', ' '),
-        pageRequest
-    );
+    List<Article> articles = articleDao.getArticlesByCategory(
+        categoryTitle.replace('_', ' '), pageRequest);
     long totalArticles = articleDao.getTotalArticlesByCategory(categoryTitle.replace('_', ' '));
-    int totalPages = (int) Math.ceil((double) totalArticles / pageSize);
-    List<Integer> pages = IntStream.range(0, totalPages).boxed().collect(Collectors.toList());
 
-    model.addAttribute("totalPages", totalPages);
-    model.addAttribute("currentPage", pageNumber);
-    model.addAttribute("pages", pages);
-    model.addAttribute("categories", categoryDao.getCategories());
+    blogService.setPageAttributes(model, pageNumber, totalArticles, pageSize);
     model.addAttribute("categoryName", categoryDao
         .getCategoryName(categoryTitle.replace('_', ' ')));
     model.addAttribute("articles", articles);
+
     return "portfolio-category";
   }
 
+  /**
+   * Handles the "/blog/group/{groupTitle}"
+   * endpoint to display articles by article group.
+   *
+   * @param pageNumber the requested page number (default is 1)
+   * @param pageSize   the requested page size (default is 12)
+   * @param groupTitle the title of the article group
+   * @param model      the Model object to populate attributes for the view
+   * @return the name of the view to render ("portfolio-group")
+   */
+  @GetMapping("blog/group/{groupTitle}")
+  public String blogGroup(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
+                          @RequestParam(value = "size", defaultValue = "12") int pageSize,
+                          @PathVariable String groupTitle,
+                          Model model) {
+    PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+    List<Article> articles = articleDao.getArticlesByArticleGroup(groupTitle, pageRequest);
+    long totalArticles = articleDao.getTotalArticlesByArticleGroup(groupTitle);
+
+    blogService.setPageAttributes(model, pageNumber, totalArticles, pageSize);
+    model.addAttribute("groupName", groupTitle);
+    model.addAttribute("articles", articles);
+
+    return "portfolio-group";
+  }
+
+  /**
+   * Handles the "/review" endpoint to process user reviews and comments.
+   *
+   * @param authorName   the name of the author
+   * @param email        the email of the author
+   * @param comment      the comment content
+   * @param articleId    the ID of the article
+   * @param articleTitle the title of the article
+   * @param attributes   the RedirectAttributes object for flash attributes
+   * @param model        the Model object to populate attributes for the view
+   * @return a redirect to the blog article page
+   */
   @PostMapping("/review")
   public String review(@RequestParam(value = "author") String authorName,
                        @RequestParam(value = "email") String email,
@@ -127,7 +177,7 @@ public class ArticleController {
                        RedirectAttributes attributes,
                        Model model) {
 
-    if (accountService.processReview(authorName, email, comment, articleId)) {
+    if (blogService.processReview(authorName, email, comment, articleId)) {
       attributes.addFlashAttribute("message", "Comment added successfully");
     } else {
       attributes.addFlashAttribute("message", "Check your data!");

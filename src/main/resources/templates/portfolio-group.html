@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en-US" xmlns:th="https://www.thymeleaf.org/">
+<html lang="en-US">
 <head th:replace="~{fragments::head}">
-    <title>Home</title>
+    <title>Categories</title>
 </head>
 <body class="home page page-template page-template-template-portfolio page-template-template-portfolio-php">
 <div id="page">
@@ -11,8 +11,11 @@
         <div id="content" class="site-content">
             <div id="primary" class="content-area column full">
                 <main id="main" class="site-main">
+                    <header class="page-header">
+                        <h3 th:text="${groupName}" class="page-title"></h3>
+                    </header>
                     <div class="grid portfoliogrid">
-                        <article th:each="article : ${articles}">
+                        <article class="hentry" th:each="article : ${articles}">
                             <header class="entry-header">
                                 <div class="entry-thumbnail">
                                     <a th:href="@{/blog/article/{title}(title=${article.getTitle().replace(' ', '_')})}">
@@ -24,19 +27,17 @@
                                 <h2 class="entry-title">
                                     <a th:href="@{/blog/article/{title}(title=${article.getTitle().replace(' ', '_')})}"
                                        th:text="${article.getTitle()}"
-                                       rel="bookmark">Sunset Beach</a>
+                                       rel="bookmark">Hot Afternoon</a>
                                 </h2>
-                                <div class="portfolio-types">
-                                    <span th:each="word : ${#strings.arraySplit(article.getArticleGroup(), ' ')}">
-                                      <a class="portfoliotype" th:text="${word}"
+                                <div class="portfoliotype">
+									<span th:each="word : ${#strings.arraySplit(article.getArticleGroup(), ' ')}">
+									  <a class="portfoliotype" th:text="${word}"
                                          th:href="@{/blog/group/{groupTitle}(groupTitle=${word})}">${word}</a>
-                                        <span th:unless="${wordStat.last}"> </span>
-                                    </span>
+										<span th:unless="${wordStat.last}"> </span>
+									</span>
                                 </div>
-
                             </header>
                         </article>
-                        <!-- Repeat the same structure for other articles -->
                     </div>
                     <!-- .grid -->
                     <br><br>
@@ -44,11 +45,11 @@
                         <span class="page-numbers current"
                               th:text="${currentPage}">1</span>
                         <a class="page-numbers" th:each="page : ${pages}"
-                           th:href="@{/home(page=${page + 1})}"
+                           th:href="@{/blog/group/{groupTitle}(groupTitle=${groupName},page=${page + 1})}"
                            th:text="${page + 1}"></a>
                         <a class="next page-numbers"
                            th:if="${currentPage + 1 < totalPages}"
-                           th:href="@{/home(page=${currentPage + 1})}">Next »</a>
+                           th:href="@{/blog/group/{groupTitle}(groupTitle=${groupName},page=${currentPage + 1})}">Next »</a>
                     </nav>
                     <br/>
                 </main>

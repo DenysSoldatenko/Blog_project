@@ -4,6 +4,7 @@ import com.example.application.models.Article;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -140,6 +141,53 @@ public class ArticleDao {
     } else {
       return Collections.emptyList(); // Category isn't found
     }
+  }
+
+  /**
+   * Retrieves a list of articles based on the provided article group and page request.
+   *
+   * @param articleGroup the article group to filter by
+   * @param pageRequest  the page request object specifying page number and page size
+   * @return a list of articles based on the article group and page request
+   */
+  public List<Article> getArticlesByArticleGroup(String articleGroup, PageRequest pageRequest) {
+    int offset = pageRequest.getPageNumber() * pageRequest.getPageSize();
+    String articlesQuery = """
+        SELECT *
+        FROM articles a
+        WHERE a.article_group LIKE ? OR a.article_group LIKE ? OR a.article_group LIKE ?
+        LIMIT ? OFFSET ?;
+        """;
+
+    String likePattern1 = "% " + articleGroup;
+    String likePattern2 = "% " + articleGroup + " %";
+    String likePattern3 = articleGroup + " %";
+    return jdbcTemplate.query(
+    articlesQuery,
+      new BeanPropertyRowMapper<>(Article.class),
+    likePattern1, likePattern2, likePattern3, pageRequest.getPageSize(), offset
+    );
+  }
+
+  /**
+   * Retrieves the total number of articles based on the provided article group.
+   *
+   * @param articleGroup the article group to filter by
+   * @return the total number of articles in the article group
+   */
+  public long getTotalArticlesByArticleGroup(String articleGroup) {
+    String countQuery = """
+          SELECT COUNT(*)
+          FROM articles a
+          WHERE a.article_group LIKE ? OR a.article_group LIKE ? OR a.article_group LIKE ?
+          """;
+
+    String likePattern1 = "% " + articleGroup;
+    String likePattern2 = "% " + articleGroup + " %";
+    String likePattern3 = articleGroup + " %";
+
+    return jdbcTemplate.queryForObject(countQuery, Integer.class,
+    likePattern1, likePattern2, likePattern3);
   }
 
   /**

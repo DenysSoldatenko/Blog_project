@@ -23,7 +23,7 @@
 <body>
 <header th:fragment="masthead" id="masthead" class="site-header">
     <div class="site-branding">
-        <h1 class="site-title"><a href="index.html" rel="home">Moschino</a></h1>
+        <h1 class="site-title"><a th:href="@{/about}" rel="home">Moschino</a></h1>
     </div>
     <nav id="site-navigation" class="main-navigation">
         <button class="menu-toggle">Menu</button>
@@ -53,7 +53,8 @@
         <div class="site-info">
             <h1 style="font-family: 'Herr Von Muellerhoff', serif; color: #ccc; font-weight: 300; text-align: center; margin-bottom: 0; margin-top: 0; line-height: 1.4; font-size: 46px;">
                 Moschino</h1>
-            <a target="blank" href="https://www.wowthemes.net/">&copy; Moschino </a>
+            <a target="blank" href="https://www.wowthemes.net/">&copy;
+                Moschino </a>
         </div>
     </div>
 </footer>
@@ -64,7 +65,8 @@
             <h4 class="widget-title">Recent Posts</h4>
             <ul>
                 <li th:each="title : ${recentTitles}">
-                    <a th:text="${title}" th:href="@{/blog/article/{title}(title=${title.replace(' ', '_')})}"></a>
+                    <a th:text="${title}"
+                       th:href="@{/blog/article/{title}(title=${title.replace(' ', '_')})}"></a>
                 </li>
             </ul>
         </aside>
@@ -72,9 +74,11 @@
         <aside id="recent-comments-2" class="widget widget_recent_comments">
             <h4 class="widget-title">Recent Comments</h4>
             <ul id="recentcomments">
-                <li class="recentcomments" th:each="comment : ${recentComments}">
+                <li class="recentcomments"
+                    th:each="comment : ${recentComments}">
                     <span th:text="${comment['ACCOUNT_NAME']}"></span> on
-                    <a th:href="@{/blog/article/{title}(title=${comment['ARTICLE_TITLE'].replace(' ', '_')})}" th:text="${comment['ARTICLE_TITLE']}"></a>
+                    <a th:href="@{/blog/article/{title}(title=${comment['ARTICLE_TITLE'].replace(' ', '_')})}"
+                       th:text="${comment['ARTICLE_TITLE']}"></a>
                 </li>
             </ul>
         </aside>

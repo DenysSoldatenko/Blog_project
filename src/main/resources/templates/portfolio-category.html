@@ -8,7 +8,7 @@
     <div class="container">
         <header th:replace="~{fragments::masthead}"></header>
         <!-- #masthead -->
-        <div id="content" class="site-content" >
+        <div id="content" class="site-content">
             <div id="primary" class="content-area column full">
                 <main id="main" class="site-main">
                     <header class="page-header">
@@ -30,9 +30,9 @@
                                        rel="bookmark">Hot Afternoon</a>
                                 </h2>
                                 <div class="portfoliotype">
-									<span th:each="word : ${#strings.arraySplit(article.getArticle_group(), ' ')}">
+									<span th:each="word : ${#strings.arraySplit(article.getArticleGroup(), ' ')}">
 									  <a class="portfoliotype" th:text="${word}"
-										 th:href="@{/portfolio-category.html}">${word}</a>
+                                         th:href="@{/blog/group/{groupTitle}(groupTitle=${word})}">${word}</a>
 										<span th:unless="${wordStat.last}"> </span>
 									</span>
                                 </div>

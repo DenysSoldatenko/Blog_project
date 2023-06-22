@@ -1,5 +1,6 @@
 package com.example.application.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -21,7 +22,8 @@ public class Article {
 
   private String title;
 
-  private String article_group;
+  @Column(name = "article_group")
+  private String articleGroup;
 
   private String logo;
 

@@ -88,7 +88,7 @@ public class SampleDataGeneratorWithFaker {
           articleContent = truncateIfTooLong(articleContent, 2500);
 
           String articleDesc = faker.lorem().paragraph();
-          articleDesc = truncateIfTooLong(articleDesc, 250);
+          articleDesc = truncateIfTooLong(articleDesc, 25);
 
           String articleGroup = String.join(" ", faker.lorem().words(5));
           articleGroup = truncateIfTooLong(articleGroup, 25);

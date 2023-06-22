@@ -1,34 +1,44 @@
 package com.example.application.utils;
 
 import com.example.application.dao.AccountDao;
+import com.example.application.dao.CategoryDao;
 import com.example.application.dao.CommentDao;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 /**
  * Service class for processing reviews and validating account data.
  */
 @Service
-public class AccountService {
+public class BlogService {
   private final JdbcTemplate jdbcTemplate;
+
+  private final CategoryDao categoryDao;
 
   private final AccountDao accountDao;
 
   private final CommentDao commentDao;
 
   /**
-   * Constructor to initialize AccountService with required dependencies.
+   * Constructor to initialize BlogService with required dependencies.
    *
    * @param jdbcTemplate the JdbcTemplate instance
+   * @param categoryDao  the CategoryDao instance
    * @param accountDao   the AccountDao instance
    * @param commentDao   the CommentDao instance
    */
   @Autowired
-  public AccountService(JdbcTemplate jdbcTemplate, AccountDao accountDao, CommentDao commentDao) {
+  public BlogService(JdbcTemplate jdbcTemplate, CategoryDao categoryDao,
+                     AccountDao accountDao, CommentDao commentDao) {
     this.jdbcTemplate = jdbcTemplate;
+    this.categoryDao = categoryDao;
     this.accountDao = accountDao;
     this.commentDao = commentDao;
   }
@@ -115,5 +125,23 @@ public class AccountService {
     } catch (EmptyResultDataAccessException e) {
       return false;
     }
+  }
+
+  /**
+   * Sets pagination-related attributes in the model.
+   *
+   * @param model        the Model object to which attributes will be added
+   * @param pageNumber  the current page number
+   * @param totalArticles the total number of articles available
+   * @param pageSize     the number of articles per page
+   */
+  public void setPageAttributes(Model model, int pageNumber, long totalArticles, int pageSize) {
+    int totalPages = (int) Math.ceil((double) totalArticles / pageSize);
+    List<Integer> pages = IntStream.range(0, totalPages).boxed().collect(Collectors.toList());
+
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("currentPage", pageNumber);
+    model.addAttribute("pages", pages);
+    model.addAttribute("categories", categoryDao.getCategories());
   }
 }

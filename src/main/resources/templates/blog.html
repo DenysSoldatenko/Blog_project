@@ -15,30 +15,34 @@
                         <article th:each="article : ${articles}">
                             <header class="entry-header">
                                 <h1 class="entry-title">
-									<a th:href="@{/blog/article/{title}(title=${article.getTitle().replace(' ', '_')})}" th:text="${article.getTitle()}" rel="bookmark">Somewhere in time</a>
-								</h1>
+                                    <a th:href="@{/blog/article/{title}(title=${article.getTitle().replace(' ', '_')})}"
+                                       th:text="${article.getTitle()}"
+                                       rel="bookmark">Somewhere in time</a>
+                                </h1>
                                 <div class="entry-meta">
 									<span class="posted-on">
-										<time th:text="${#dates.format(article.getCreated(), 'MMMM d, yyyy')}" class="entry-date published">April 12, 2016</time>
+										<time th:text="${#dates.format(article.getCreated(), 'MMMM d, yyyy')}"
+                                              class="entry-date published">April 12, 2016</time>
 									</span>
-									<span class="comments-link">
-										<a th:text="${article.getComments() + ' comments'}" >Leave a comment</a>
+                                    <span class="comments-link">
+										<a th:text="${article.getComments() + ' comments'}">Leave a comment</a>
 									</span>
                                 </div>
                                 <div class="entry-thumbnail">
-									<img th:src="${article.getLogo()}"
-										 style="width: 290px; height: 193px;"
-										 alt="Random Image">
+                                    <img th:src="${article.getLogo()}"
+                                         style="width: 290px; height: 193px;"
+                                         alt="Random Image">
                                 </div>
                             </header>
                             <div class="entry-summary">
                                 <p th:text="${article.getDescription()}">
-									<a class="more-link" href="blog-single.html">Read more</a>
+                                    <a class="more-link"
+                                       href="blog-single.html">Read more</a>
                                 </p>
                             </div>
                         </article>
                     </div>
-						<div class="clearfix">
+                    <div class="clearfix">
                     </div>
                     <nav class="pagination"></nav>
                 </main>
@@ -54,17 +58,24 @@
                             <p>
                                 <img src="https://picsum.photos/80"
                                      class="alignleft"
-                                     style="width:80px;border-radius:50%;margin-bottom:0;" alt="Image">
-								Curabitur et facilisis dolor, sit amet elementum nibh. Aenean feugiat tellus ex, in maximus leo tincidunt non. Maecenas ullamcorper lacus eu nulla ultrices, a posuere tortor mattis. Nulla a sem hendrerit.
+                                     style="width:80px;border-radius:50%;margin-bottom:0;"
+                                     alt="Image">
+                                Curabitur et facilisis dolor, sit amet elementum
+                                nibh. Aenean feugiat tellus ex, in maximus leo
+                                tincidunt non. Maecenas ullamcorper lacus eu
+                                nulla ultrices, a posuere tortor mattis. Nulla a
+                                sem hendrerit.
                             </p>
                         </div>
                     </aside>
 
-                    <aside id="recent-posts-2" class="widget widget_recent_entries">
+                    <aside id="recent-posts-2"
+                           class="widget widget_recent_entries">
                         <h4 class="widget-title">Recent Posts</h4>
                         <ul>
                             <li th:each="title : ${recentTitles}">
-                                <a th:text="${title}" th:href="@{/blog/article/{title}(title=${title.replace(' ', '_')})}"></a>
+                                <a th:text="${title}"
+                                   th:href="@{/blog/article/{title}(title=${title.replace(' ', '_')})}"></a>
                             </li>
                         </ul>
                     </aside>
@@ -74,20 +85,25 @@
                         <div class="textwidget">
                             <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fwowthemesnet-562560840468823%2F&amp;tabs=timeline&amp;width=340&amp;height=380&amp;small_header=false&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=false&amp;appId=365036103630036"
                                     width="340" height="380"
-									style="border:none;overflow:hidden" scrolling="no" frameborder="0"
-									allowtransparency="true">
+                                    style="border:none;overflow:hidden"
+                                    scrolling="no" frameborder="0"
+                                    allowtransparency="true">
                             </iframe>
                         </div>
                     </aside>
 
-                    <aside id="recent-comments-2" class="widget widget_recent_comments">
+                    <aside id="recent-comments-2"
+                           class="widget widget_recent_comments">
                         <h4 class="widget-title">Recent Comments</h4>
                         <ul id="recentcomments">
-							<li class="recentcomments" th:each="comment : ${recentComments}">
-								<span th:text="${comment['ACCOUNT_NAME']}"></span> on
-								<a th:href="@{/blog/article/{title}(title=${comment['ARTICLE_TITLE'].replace(' ', '_')})}" th:text="${comment['ARTICLE_TITLE']}"></a>
-							</li>
-						</ul>
+                            <li class="recentcomments"
+                                th:each="comment : ${recentComments}">
+                                <span th:text="${comment['ACCOUNT_NAME']}"></span>
+                                on
+                                <a th:href="@{/blog/article/{title}(title=${comment['ARTICLE_TITLE'].replace(' ', '_')})}"
+                                   th:text="${comment['ARTICLE_TITLE']}"></a>
+                            </li>
+                        </ul>
                     </aside>
 
                 </div>
